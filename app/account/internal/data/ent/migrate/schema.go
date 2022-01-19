@@ -15,6 +15,8 @@ var (
 		{Name: "age", Type: field.TypeInt, Default: -1},
 		{Name: "email", Type: field.TypeString},
 		{Name: "sex", Type: field.TypeBool},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
 	}
 	// AccountsTable holds the schema information for the "accounts" table.
 	AccountsTable = &schema.Table{

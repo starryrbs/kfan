@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
+	"time"
 )
 
 // Account holds the schema definition for the Account entity.
@@ -13,11 +14,15 @@ type Account struct {
 // Fields of the Account.
 func (Account) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int("id").Positive(),
 		field.String("name").Default(""),
 		field.Int("age").Default(-1),
 		field.String("email"),
 		field.Bool("sex"),
+		field.Time("created_at").
+			Default(time.Now),
+		field.Time("updated_at").
+			Default(time.Now).
+			UpdateDefault(time.Now),
 	}
 }
 

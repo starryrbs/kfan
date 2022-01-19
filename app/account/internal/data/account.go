@@ -33,7 +33,7 @@ func (a *accountRepo) CreateAccount(ctx context.Context, account *biz.Account) (
 func (a *accountRepo) ListAccount(ctx context.Context) ([]*biz.Account, error) {
 	pos, err := a.data.db.Account.Query().All(ctx)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 	rv := make([]*biz.Account, 0)
 	for _, po := range pos {

@@ -5,6 +5,7 @@ package ent
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -73,6 +74,26 @@ func (au *AccountUpdate) SetSex(b bool) *AccountUpdate {
 	return au
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (au *AccountUpdate) SetCreatedAt(t time.Time) *AccountUpdate {
+	au.mutation.SetCreatedAt(t)
+	return au
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (au *AccountUpdate) SetNillableCreatedAt(t *time.Time) *AccountUpdate {
+	if t != nil {
+		au.SetCreatedAt(*t)
+	}
+	return au
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (au *AccountUpdate) SetUpdatedAt(t time.Time) *AccountUpdate {
+	au.mutation.SetUpdatedAt(t)
+	return au
+}
+
 // Mutation returns the AccountMutation object of the builder.
 func (au *AccountUpdate) Mutation() *AccountMutation {
 	return au.mutation
@@ -84,6 +105,7 @@ func (au *AccountUpdate) Save(ctx context.Context) (int, error) {
 		err      error
 		affected int
 	)
+	au.defaults()
 	if len(au.hooks) == 0 {
 		affected, err = au.sqlSave(ctx)
 	} else {
@@ -129,6 +151,14 @@ func (au *AccountUpdate) Exec(ctx context.Context) error {
 func (au *AccountUpdate) ExecX(ctx context.Context) {
 	if err := au.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (au *AccountUpdate) defaults() {
+	if _, ok := au.mutation.UpdatedAt(); !ok {
+		v := account.UpdateDefaultUpdatedAt()
+		au.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -183,6 +213,20 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Type:   field.TypeBool,
 			Value:  value,
 			Column: account.FieldSex,
+		})
+	}
+	if value, ok := au.mutation.CreatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: account.FieldCreatedAt,
+		})
+	}
+	if value, ok := au.mutation.UpdatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: account.FieldUpdatedAt,
 		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, au.driver, _spec); err != nil {
@@ -251,6 +295,26 @@ func (auo *AccountUpdateOne) SetSex(b bool) *AccountUpdateOne {
 	return auo
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (auo *AccountUpdateOne) SetCreatedAt(t time.Time) *AccountUpdateOne {
+	auo.mutation.SetCreatedAt(t)
+	return auo
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (auo *AccountUpdateOne) SetNillableCreatedAt(t *time.Time) *AccountUpdateOne {
+	if t != nil {
+		auo.SetCreatedAt(*t)
+	}
+	return auo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (auo *AccountUpdateOne) SetUpdatedAt(t time.Time) *AccountUpdateOne {
+	auo.mutation.SetUpdatedAt(t)
+	return auo
+}
+
 // Mutation returns the AccountMutation object of the builder.
 func (auo *AccountUpdateOne) Mutation() *AccountMutation {
 	return auo.mutation
@@ -269,6 +333,7 @@ func (auo *AccountUpdateOne) Save(ctx context.Context) (*Account, error) {
 		err  error
 		node *Account
 	)
+	auo.defaults()
 	if len(auo.hooks) == 0 {
 		node, err = auo.sqlSave(ctx)
 	} else {
@@ -314,6 +379,14 @@ func (auo *AccountUpdateOne) Exec(ctx context.Context) error {
 func (auo *AccountUpdateOne) ExecX(ctx context.Context) {
 	if err := auo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (auo *AccountUpdateOne) defaults() {
+	if _, ok := auo.mutation.UpdatedAt(); !ok {
+		v := account.UpdateDefaultUpdatedAt()
+		auo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -385,6 +458,20 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 			Type:   field.TypeBool,
 			Value:  value,
 			Column: account.FieldSex,
+		})
+	}
+	if value, ok := auo.mutation.CreatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: account.FieldCreatedAt,
+		})
+	}
+	if value, ok := auo.mutation.UpdatedAt(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeTime,
+			Value:  value,
+			Column: account.FieldUpdatedAt,
 		})
 	}
 	_node = &Account{config: auo.config}

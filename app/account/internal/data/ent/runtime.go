@@ -3,6 +3,8 @@
 package ent
 
 import (
+	"time"
+
 	"github.com/starryrbs/kfan/app/account/internal/data/ent/account"
 	"github.com/starryrbs/kfan/app/account/internal/data/ent/schema"
 )
@@ -14,15 +16,21 @@ func init() {
 	accountFields := schema.Account{}.Fields()
 	_ = accountFields
 	// accountDescName is the schema descriptor for name field.
-	accountDescName := accountFields[1].Descriptor()
+	accountDescName := accountFields[0].Descriptor()
 	// account.DefaultName holds the default value on creation for the name field.
 	account.DefaultName = accountDescName.Default.(string)
 	// accountDescAge is the schema descriptor for age field.
-	accountDescAge := accountFields[2].Descriptor()
+	accountDescAge := accountFields[1].Descriptor()
 	// account.DefaultAge holds the default value on creation for the age field.
 	account.DefaultAge = accountDescAge.Default.(int)
-	// accountDescID is the schema descriptor for id field.
-	accountDescID := accountFields[0].Descriptor()
-	// account.IDValidator is a validator for the "id" field. It is called by the builders before save.
-	account.IDValidator = accountDescID.Validators[0].(func(int) error)
+	// accountDescCreatedAt is the schema descriptor for created_at field.
+	accountDescCreatedAt := accountFields[4].Descriptor()
+	// account.DefaultCreatedAt holds the default value on creation for the created_at field.
+	account.DefaultCreatedAt = accountDescCreatedAt.Default.(func() time.Time)
+	// accountDescUpdatedAt is the schema descriptor for updated_at field.
+	accountDescUpdatedAt := accountFields[5].Descriptor()
+	// account.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	account.DefaultUpdatedAt = accountDescUpdatedAt.Default.(func() time.Time)
+	// account.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	account.UpdateDefaultUpdatedAt = accountDescUpdatedAt.UpdateDefault.(func() time.Time)
 }
