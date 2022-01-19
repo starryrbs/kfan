@@ -1,0 +1,103 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/apps/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Account API
+    version: 0.0.1
+paths:
+    /v1/accounts:
+        get:
+            tags:
+                - Account
+            operationId: Account_ListAccount
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListAccountReply'
+        post:
+            tags:
+                - Account
+            operationId: Account_CreateAccount
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateAccountRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateAccountReply'
+    /v1/accounts/{id}:
+        get:
+            tags:
+                - Account
+            operationId: Account_GetAccount
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetAccountReply'
+components:
+    schemas:
+        CreateAccountReply:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+        CreateAccountRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                sex:
+                    type: boolean
+                email:
+                    type: string
+                age:
+                    type: integer
+                    format: int64
+        GetAccountReply:
+            type: object
+            properties: {}
+        ListAccountReply:
+            type: object
+            properties:
+                results:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ListAccountReply_Account'
+        ListAccountReply_Account:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+                name:
+                    type: string
+                sex:
+                    type: boolean
+                email:
+                    type: string
+                age:
+                    type: integer
+                    format: int64
+tags:
+    - name: Account

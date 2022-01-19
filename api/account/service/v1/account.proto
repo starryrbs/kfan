@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package api.account.service.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "/api/account/service/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.account.service.v1";
+
+service Account {
+    rpc CreateAccount(CreateAccountRequest) returns (CreateAccountReply) {
+        option (google.api.http) = {
+            post: "/v1/accounts",
+            body: "*"
+        };
+    };
+    rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountReply);
+    rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountReply);
+    rpc GetAccount(GetAccountRequest) returns (GetAccountReply) {
+        option (google.api.http) = {
+            get: "/v1/accounts/{id}"
+        };
+    };
+    rpc ListAccount(ListAccountRequest) returns (ListAccountReply) {
+        option (google.api.http) = {
+            get: "/v1/accounts"
+        };
+    };
+}
+
+message CreateAccountRequest {
+    string name = 1;
+    bool sex = 2;
+    string email = 3;
+    int64 age = 4;
+}
+message CreateAccountReply {
+    int32 id = 1;
+}
+
+message UpdateAccountRequest {}
+message UpdateAccountReply {}
+
+message DeleteAccountRequest {}
+message DeleteAccountReply {}
+
+message GetAccountRequest {
+    int32  id = 1;
+}
+message GetAccountReply {}
+
+message ListAccountRequest {}
+message ListAccountReply {
+    message Account {
+        int32 id = 1;
+        string name = 2;
+        bool sex = 3;
+        string email = 4;
+        int64 age = 5;
+    }
+    repeated Account results = 1;
+}
