@@ -3,6 +3,7 @@ syntax = "proto3";
 package api.account.service.v1;
 
 import "google/api/annotations.proto";
+import "validate/validate.proto";
 
 option go_package = "/api/account/service/v1;v1";
 option java_multiple_files = true;
@@ -30,9 +31,9 @@ service Account {
 }
 
 message CreateAccountRequest {
-    string name = 1;
+    string name = 1 [(validate.rules).string = {min_bytes: 1}];
     bool sex = 2;
-    string email = 3;
+    string email = 3 [(validate.rules).string.email = true];
     int64 age = 4;
 }
 message CreateAccountReply {
@@ -51,9 +52,10 @@ message GetAccountRequest {
 message GetAccountReply {}
 
 message ListAccountRequest {}
+
 message ListAccountReply {
     message Account {
-        int32 id = 1;
+        int32 id = 1 ;
         string name = 2;
         bool sex = 3;
         string email = 4;
