@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package api.house.service.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "github.com/starryrbs/kfan/api/house/service/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.house.service.v1";
+
+service House {
+    rpc CreateHouse(CreateHouseRequest) returns (CreateHouseReply) {
+        option (google.api.http) = {
+            post: "/v1/houses",
+            body: "*"
+        };
+    };
+    rpc GetHouse(GetHouseRequest) returns (GetHouseReply) {
+        option (google.api.http) = {
+            get: "/v1/houses/{id}"
+        };
+    };
+    rpc ListHouse(ListHouseRequest) returns (ListHouseReply) {
+        option (google.api.http) = {
+            get: "/v1/houses"
+        };
+    };
+}
+
+message CreateHouseRequest {
+    string title = 1 [(validate.rules).string = {min_len: 1,max_len: 20}];
+    string community = 2 [(validate.rules).string = {min_len: 1,max_len: 20}];
+    int32 floor_count = 3;
+    int32 kitchen_count = 4;
+    int32 toilet_count = 5;
+    int32 hall_count = 6;
+    int32 room_count = 7;
+}
+message CreateHouseReply {
+    int64 id = 1;
+}
+
+message GetHouseRequest {
+    int64 id = 1;
+}
+message GetHouseReply {
+    int64 id = 11;
+    string title = 1;
+    string community = 2;
+    int32 floor_count = 3;
+    int32 kitchen_count = 4;
+    int32 toilet_count = 5;
+    int32 hall_count = 6;
+    int32 room_count = 7;
+}
+
+message ListHouseRequest {}
+message ListHouseReply {
+    message House {
+        int64 id = 11;
+        string title = 1;
+        string community = 2;
+        string description = 3;
+    }
+    repeated House results = 1;
+}

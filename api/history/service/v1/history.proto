@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package api.history.service.v1;
+
+import "google/protobuf/timestamp.proto";
+import "validate/validate.proto";
+
+option go_package = "github.com/starryrbs/kfan/api/history/service/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.history.service.v1";
+
+service History {
+    rpc SaveHistory(SaveHistoryRequest) returns (SaveHistoryReply);
+    rpc GetHistory(GetHistoryRequest) returns (GetHistoryReply);
+}
+
+message SaveHistoryRequest {
+    int64 obj_id = 1 [(validate.rules).int64 = {gt: 0}];
+    string obj_type = 2 [(validate.rules).string = {min_len: 1}];
+    int64 user_id = 3 [(validate.rules).int64 = {gt: 0}];
+}
+message SaveHistoryReply {}
+
+message GetHistoryRequest {
+    int64 user_id = 1;
+}
+message GetHistoryReply {
+    message History {
+        int64 obj_id = 1;
+        string obj_type = 2;
+        google.protobuf.Timestamp create_at = 3;
+    }
+    repeated History results = 1;
+}

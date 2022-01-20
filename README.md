@@ -9,3 +9,11 @@
     ```shell
     kratos proto client api/account/service/v1/account.proto
     ```
+
+## docker部署
+
+1. 创建volume
+
+```shell
+docker volume create kfan-db
+```

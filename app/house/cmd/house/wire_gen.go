@@ -9,11 +9,11 @@ package main
 import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
-	"house/internal/biz"
-	"house/internal/conf"
-	"house/internal/data"
-	"house/internal/server"
-	"house/internal/service"
+	"github.com/starryrbs/kfan/app/house/internal/biz"
+	"github.com/starryrbs/kfan/app/house/internal/conf"
+	"github.com/starryrbs/kfan/app/house/internal/data"
+	"github.com/starryrbs/kfan/app/house/internal/server"
+	"github.com/starryrbs/kfan/app/house/internal/service"
 )
 
 // Injectors from wire.go:
@@ -24,11 +24,11 @@ func initApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	if err != nil {
 		return nil, nil, err
 	}
-	greeterRepo := data.NewGreeterRepo(dataData, logger)
-	greeterUsecase := biz.NewGreeterUsecase(greeterRepo, logger)
-	greeterService := service.NewGreeterService(greeterUsecase, logger)
-	httpServer := server.NewHTTPServer(confServer, greeterService, logger)
-	grpcServer := server.NewGRPCServer(confServer, greeterService, logger)
+	houseRepo := data.NewHouseRepo(dataData, logger)
+	houseUseCase := biz.NewHouseUseCase(houseRepo, logger)
+	houseService := service.NewHouseService(houseUseCase, logger)
+	httpServer := server.NewHTTPServer(confServer, houseService, logger)
+	grpcServer := server.NewGRPCServer(confServer, houseService, logger)
 	app := newApp(logger, httpServer, grpcServer)
 	return app, func() {
 		cleanup()
