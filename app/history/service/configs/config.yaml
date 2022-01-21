@@ -18,3 +18,5 @@ data:
   kafka:
     addrs:
       - 127.0.0.1:9092
+    topic: 'history'
+    groupId: 'history.v1'

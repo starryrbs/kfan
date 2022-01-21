@@ -57,9 +57,7 @@ func NewData(kp sarama.AsyncProducer, c *conf.Data, logger log.Logger) (*Data, f
 	}
 
 	return d, func() {
-		if err := d.db.Close(); err != nil {
-			log.Error(err)
-		}
+
 		if err := d.rdb.Close(); err != nil {
 			log.Error(err)
 		}

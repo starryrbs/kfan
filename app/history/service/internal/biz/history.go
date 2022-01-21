@@ -17,6 +17,10 @@ type HistoryRepo interface {
 	GetHistory(ctx context.Context, id int64) ([]*History, error)
 }
 
+type HistoryJobRepo interface {
+	PersistentSaveHistory(ctx context.Context, history *History) (*History, error)
+}
+
 type HistoryUseCase struct {
 	repo HistoryRepo
 	log  *log.Helper

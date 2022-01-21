@@ -7,7 +7,7 @@ import (
 	ent2 "github.com/starryrbs/kfan/app/history/service/internal/data/ent"
 
 	// required by schema hooks.
-	_ "github.com/starryrbs/kfan/app/history/internal/data/ent/runtime"
+	_ "github.com/starryrbs/kfan/app/history/service/internal/data/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
 )

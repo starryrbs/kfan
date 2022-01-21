@@ -42,9 +42,19 @@ message Data {
 
   message Kafka {
     repeated string addrs = 1;
+    string topic = 2;
+    string group_id = 3;
   }
 
   Database database = 1;
   Redis redis = 2;
   Kafka kafka = 3;
+}
+
+message Registry {
+  message Consul {
+    string address = 1;
+    string scheme = 2;
+  }
+  Consul consul = 1;
 }
