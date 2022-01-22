@@ -6,8 +6,18 @@ option go_package = "house/internal/conf;conf";
 import "google/protobuf/duration.proto";
 
 message Bootstrap {
-  Server server = 1;
-  Data data = 2;
+  Trace trace = 1;
+  Server server = 2;
+  Data data = 3;
+  Auth auth = 4;
+}
+
+message Trace {
+  string endpoint = 1;
+}
+
+message Auth {
+  string key = 1;
 }
 
 message Server {

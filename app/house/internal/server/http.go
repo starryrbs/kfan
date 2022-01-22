@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/middleware/validate"
 	"github.com/go-kratos/kratos/v2/transport/http"
 	v1 "github.com/starryrbs/kfan/api/house/service/v1"
@@ -16,6 +17,7 @@ func NewHTTPServer(c *conf.Server, house *service.HouseService, logger log.Logge
 		http.Middleware(
 			recovery.Recovery(),
 			validate.Validator(),
+			tracing.Server(),
 		),
 	}
 	if c.Http.Network != "" {

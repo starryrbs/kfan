@@ -2,12 +2,17 @@ package data
 
 import (
 	"context"
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/wire"
 	"github.com/starryrbs/kfan/app/house/internal/conf"
 	"github.com/starryrbs/kfan/app/house/internal/data/ent"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 )
 
 // ProviderSet2 is data providers.
@@ -26,7 +31,21 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 		c.Database.Source,
 	)
 
-	client := ent.NewClient(ent.Driver(drv))
+	sqlDrv := dialect.DebugWithContext(drv, func(ctx context.Context, i ...interface{}) {
+		log.WithContext(ctx).Info(i...)
+		tracer := otel.Tracer("ent.")
+		kind := trace.SpanKindServer
+		_, span := tracer.Start(ctx,
+			"Query",
+			trace.WithAttributes(
+				attribute.String("sql", fmt.Sprint(i...)),
+			),
+			trace.WithSpanKind(kind),
+		)
+		span.End()
+	})
+	client := ent.NewClient(ent.Driver(sqlDrv))
+
 	if err != nil {
 		return nil, nil, err
 	}
