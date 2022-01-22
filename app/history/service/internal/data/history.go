@@ -6,6 +6,8 @@ import (
 	"github.com/Shopify/sarama"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/starryrbs/kfan/app/history/service/internal/biz"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/Shopify/sarama/otelsarama"
+	"go.opentelemetry.io/otel"
 	"time"
 )
 
@@ -41,11 +43,19 @@ func (h historyRepo) SaveHistory(ctx context.Context, history *biz.History) (*bi
 	}
 
 	b, err := json.Marshal(history)
-	// 向kafka写入
-	h.data.kp.Input() <- &sarama.ProducerMessage{
+
+	// Create root span
+	tr := otel.Tracer("producer")
+	ctx, span := tr.Start(ctx, "produce message")
+	defer span.End()
+	msg := sarama.ProducerMessage{
 		Topic: "history",
 		Value: sarama.ByteEncoder(b),
 	}
+
+	otel.GetTextMapPropagator().Inject(ctx, otelsarama.NewProducerMessageCarrier(&msg))
+	// 向kafka写入
+	h.data.kp.Input() <- &msg
 	return history, nil
 }
 

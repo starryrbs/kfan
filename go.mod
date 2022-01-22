@@ -8,13 +8,16 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
 	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20220119103646-f050b0743222
 	github.com/go-kratos/kratos/v2 v2.1.4
+	github.com/go-redis/redis/extra/redisotel v0.3.0
 	github.com/go-redis/redis/v8 v8.11.4
 	github.com/go-sql-driver/mysql v1.5.1-0.20200311113236-681ffa848bae
 	github.com/google/wire v0.5.0
 	github.com/hashicorp/consul/api v1.9.1
+	go.opentelemetry.io/contrib/instrumentation/github.com/Shopify/sarama/otelsarama v0.28.0
 	go.opentelemetry.io/otel v1.3.0
 	go.opentelemetry.io/otel/exporters/jaeger v1.3.0
 	go.opentelemetry.io/otel/sdk v1.3.0
+	go.opentelemetry.io/otel/trace v1.3.0
 	google.golang.org/genproto v0.0.0-20211223182754-3ac035c7e7cb
 	google.golang.org/grpc v1.43.0
 	google.golang.org/protobuf v1.27.1
@@ -33,6 +36,7 @@ require (
 	github.com/go-logr/logr v1.2.1 // indirect
 	github.com/go-logr/stdr v1.2.0 // indirect
 	github.com/go-playground/form/v4 v4.2.0 // indirect
+	github.com/go-redis/redis/extra/rediscmd v0.2.0 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/uuid v1.3.0 // indirect
@@ -57,11 +61,10 @@ require (
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
 	github.com/pierrec/lz4 v2.6.1+incompatible // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 // indirect
-	go.opentelemetry.io/otel/trace v1.3.0 // indirect
-	golang.org/x/crypto v0.0.0-20201112155050-0c6587e931a9 // indirect
+	golang.org/x/crypto v0.0.0-20210920023735-84f357641f63 // indirect
 	golang.org/x/net v0.0.0-20220105145211-5b0dc2dfae98 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/sys v0.0.0-20210816074244-15123e1e1f71 // indirect
-	golang.org/x/text v0.3.6 // indirect
+	golang.org/x/text v0.3.7 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )

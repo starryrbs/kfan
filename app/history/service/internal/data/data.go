@@ -2,14 +2,21 @@ package data
 
 import (
 	"context"
+	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
+	"fmt"
 	"github.com/Shopify/sarama"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-redis/redis/extra/redisotel"
 	"github.com/go-redis/redis/v8"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/wire"
 	"github.com/starryrbs/kfan/app/history/service/internal/conf"
 	ent "github.com/starryrbs/kfan/app/history/service/internal/data/ent"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/Shopify/sarama/otelsarama"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 )
 
 // ProviderSet is data providers.
@@ -31,7 +38,20 @@ func NewData(kp sarama.AsyncProducer, c *conf.Data, logger log.Logger) (*Data, f
 		c.Database.Source,
 	)
 
-	client := ent.NewClient(ent.Driver(drv))
+	sqlDrv := dialect.DebugWithContext(drv, func(ctx context.Context, i ...interface{}) {
+		log.WithContext(ctx).Info(i...)
+		tracer := otel.Tracer("ent.")
+		kind := trace.SpanKindServer
+		_, span := tracer.Start(ctx,
+			"Query",
+			trace.WithAttributes(
+				attribute.String("sql", fmt.Sprint(i...)),
+			),
+			trace.WithSpanKind(kind),
+		)
+		span.End()
+	})
+	client := ent.NewClient(ent.Driver(sqlDrv))
 	if err != nil {
 		return nil, nil, err
 	}
@@ -49,7 +69,7 @@ func NewData(kp sarama.AsyncProducer, c *conf.Data, logger log.Logger) (*Data, f
 		WriteTimeout: c.Redis.WriteTimeout.AsDuration(),
 		ReadTimeout:  c.Redis.ReadTimeout.AsDuration(),
 	})
-
+	rdb.AddHook(redisotel.TracingHook{})
 	d := &Data{
 		db:  client,
 		kp:  kp,
@@ -67,6 +87,7 @@ func NewData(kp sarama.AsyncProducer, c *conf.Data, logger log.Logger) (*Data, f
 func NewKafkaProducer(conf *conf.Data) sarama.AsyncProducer {
 	c := sarama.NewConfig()
 	p, err := sarama.NewAsyncProducer(conf.Kafka.Addrs, c)
+	p = otelsarama.WrapAsyncProducer(c, p)
 	if err != nil {
 		panic(err)
 	}
