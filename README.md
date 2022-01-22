@@ -88,6 +88,38 @@ cd deploy/docker && make kfan-run
 make clean
 ```
 
+## 并发的使用
+
+errgroup 的并行链路请求
+
+并行请求多个服务获取详情信息
+
+[代码位置](https://github.com/starryrbs/kfan/blob/master/app/history/service/internal/data/history.go#L73)
+```go
+eg, ctx := errgroup.WithContext(ctx)
+for _, history := range histories {
+  history := history
+  eg.Go(func() error {
+      house, err := h.data.h1.GetHouse(ctx, &housepb.GetHouseRequest{Id: history.ObjId})
+      if err != nil {
+          return err
+      }
+      history.ObjDetail = structs.Map(house)
+      return nil
+  })
+  eg.Go(func() error {
+      account, err := h.data.a1.GetAccount(ctx, &accountpb.GetAccountRequest{Id: int32(history.UserId)})
+      if err != nil {
+          return err
+      }
+      history.Username = account.GetName()
+      return nil
+  })
+}
+err = eg.Wait()
+```
+
+
 ## 开发命令
 
 1. 生成proto代码
