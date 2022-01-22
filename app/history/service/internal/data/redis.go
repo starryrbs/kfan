@@ -3,10 +3,11 @@ package data
 import (
 	"context"
 	"fmt"
-	"github.com/go-redis/redis/v8"
-	"github.com/starryrbs/kfan/app/history/service/internal/biz"
 	"strconv"
 	"strings"
+
+	"github.com/go-redis/redis/v8"
+	"github.com/starryrbs/kfan/app/history/service/internal/biz"
 )
 
 func historyKey(userId int64) string {

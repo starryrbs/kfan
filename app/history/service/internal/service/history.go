@@ -2,10 +2,12 @@ package service
 
 import (
 	"context"
-	"github.com/starryrbs/kfan/app/history/service/internal/biz"
+	"time"
+
 	"google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
-	"time"
+
+	"github.com/starryrbs/kfan/app/history/service/internal/biz"
 
 	pb "github.com/starryrbs/kfan/api/history/service/v1"
 )

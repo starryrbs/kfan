@@ -2,6 +2,7 @@ package job
 
 import (
 	"context"
+
 	"github.com/Shopify/sarama"
 )
 

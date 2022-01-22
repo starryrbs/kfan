@@ -2,9 +2,10 @@ package main
 
 import (
 	"flag"
+	"os"
+
 	"github.com/starryrbs/kfan/app/history/service/internal/conf"
 	"github.com/starryrbs/kfan/pkg/job"
-	"os"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"

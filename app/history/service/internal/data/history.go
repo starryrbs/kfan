@@ -3,6 +3,8 @@ package data
 import (
 	"context"
 	"encoding/json"
+	"time"
+
 	"github.com/Shopify/sarama"
 	"github.com/fatih/structs"
 	"github.com/go-kratos/kratos/v2/log"
@@ -10,7 +12,6 @@ import (
 	"github.com/starryrbs/kfan/app/history/service/internal/biz"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/Shopify/sarama/otelsarama"
 	"go.opentelemetry.io/otel"
-	"time"
 )
 
 type historyRepo struct {

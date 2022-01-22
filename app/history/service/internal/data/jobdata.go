@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+
 	"entgo.io/ent/dialect/sql"
 	"github.com/Shopify/sarama"
 	"github.com/go-kratos/kratos/v2/log"

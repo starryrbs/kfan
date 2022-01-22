@@ -1,9 +1,9 @@
 syntax = "proto3";
 package kratos.api;
 
-option go_package = "house/internal/conf;conf";
-
 import "google/protobuf/duration.proto";
+
+option go_package = "house/internal/conf;conf";
 
 message Bootstrap {
   Trace trace = 1;

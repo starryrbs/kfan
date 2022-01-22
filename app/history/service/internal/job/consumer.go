@@ -3,9 +3,10 @@ package job
 import (
 	"context"
 	"encoding/json"
+	"log"
+
 	"github.com/Shopify/sarama"
 	"github.com/starryrbs/kfan/app/history/service/internal/biz"
-	"log"
 )
 
 type consumeHandler struct {

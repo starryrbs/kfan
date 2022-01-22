@@ -3,8 +3,8 @@ syntax = "proto3";
 package api.history.service.v1;
 
 import "google/api/annotations.proto";
-import "google/protobuf/timestamp.proto";
 import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
 option go_package = "github.com/starryrbs/kfan/api/history/service/v1;v1";
