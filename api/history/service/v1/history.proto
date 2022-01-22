@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package api.history.service.v1;
 
+import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
 
@@ -10,7 +11,12 @@ option java_multiple_files = true;
 option java_package = "api.history.service.v1";
 
 service History {
-    rpc SaveHistory(SaveHistoryRequest) returns (SaveHistoryReply);
+    rpc SaveHistory(SaveHistoryRequest) returns (SaveHistoryReply) {
+        option (google.api.http) = {
+            post: "/v1/history",
+            body: "*"
+        };
+    };
     rpc GetHistory(GetHistoryRequest) returns (GetHistoryReply);
 }
 

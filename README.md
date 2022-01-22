@@ -2,6 +2,9 @@
 
 基于Golang+Kratos+MySQL+Redis+Kafka+elk+Opentracing实现的微服务项目
 
+## 效果展示
+
+![](./docs/images/house-list.png)
 
 ## 技术点
 
@@ -12,6 +15,78 @@
 - [ ] 并发的使用（errgroup 的并行链路请求）
 - [ ] 微服务中间件的使用（ELK、Opentracing、Prometheus、Kafka）
 - [ ] 缓存的使用优化（一致性处理、Pipeline 优化）
+
+## 项目目录结构
+
+```
+.
+├── README.md
+├── api
+│   ├── account 
+│   ├── history
+│   └── house
+├── app
+│   ├── account
+│   ├── history
+│   └── house
+├── deploy
+│   └── docker
+├── docs
+│   └── images
+├── gen
+├── go.mod
+├── go.sum
+├── openapi.yaml
+├── pkg
+│   └── job
+├── third_party
+│   ├── README.md
+│   ├── errors
+│   ├── google
+│   ├── protoc-gen-openapiv2
+│   └── validate
+└── web
+    ├── admin
+    └── kfan
+```
+
+### 微服务项目结构
+
+通过kratos构建工具生成，新增了job子目录
+
+```
+.
+├── Dockerfile
+├── Makefile
+├── README.md
+├── cmd
+│   ├── history
+│   └── job
+├── configs
+│   └── config.yaml
+├── generate.go
+└── internal
+    ├── biz
+    ├── conf
+    ├── data
+    ├── job 
+    ├── server
+    └── service
+```
+
+## 运行
+
+1. docker-compose运行
+
+```shell
+cd deploy/docker && make kfan-run
+```
+
+2. 清除容器
+
+```shell
+make clean
+```
 
 ## 开发命令
 

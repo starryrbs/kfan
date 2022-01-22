@@ -28,12 +28,15 @@
 
             </div>
             <div class="nlcd_name">
-              <a data-showlocation="2" data-tabtype="新房" target="_blank"><span class="tit_shop">{{house.title}}</span></a>
+              <a data-showlocation="2" data-tabtype="新房" target="_blank"><span class="tit_shop" style="cursor: pointer"
+                                                                               @click="()=>{onClickHouseTitle(house)}">{{
+                  house.title
+                }}</span></a>
             </div>
             <div class="house_type clearfix">
 
 
-              <a>{{house.description}}</a>
+              <a>{{ house.description }}</a>
               &nbsp;
               <span>4.14分/20条评论</span>
             </div>
@@ -61,6 +64,8 @@
 
 import {defineComponent} from 'vue'
 import {getHouses} from "@/api/house";
+import {GetUser, StoreUser} from "@/utils/user";
+import {saveHistory} from "@/api/history";
 
 export default defineComponent({
   name: "index",
@@ -73,6 +78,14 @@ export default defineComponent({
     getHouses().then(response => {
       this.houses = response.data.results
     })
+  },
+  methods: {
+    onClickHouseTitle(house) {
+      const user = GetUser()
+      if (user) {
+        saveHistory(user.id, house.id, "house")
+      }
+    }
   }
 })
 </script>
@@ -93,12 +106,14 @@ export default defineComponent({
   padding-top: 1px;
   width: 544px;
   min-height: 135px;
+
   .house_price {
     float: right;
     margin-top: 50px;
     line-height: 29px;
     color: #df2f30;
   }
+
   .nlcd_name {
     margin-top: -4px;
     height: 30px;
@@ -110,6 +125,7 @@ export default defineComponent({
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
   .house_type {
     position: relative;
     margin-top: 8px;
@@ -121,6 +137,7 @@ export default defineComponent({
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
   .address {
     margin-top: 8px;
     width: 344px;
@@ -131,12 +148,15 @@ export default defineComponent({
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
   .stag_box {
     margin-top: 18px;
+
     .forSale {
       color: #f59505;
       background: #fff6e8;
     }
+
     span {
       display: block;
       float: left;

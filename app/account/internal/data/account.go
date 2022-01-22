@@ -4,11 +4,30 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/starryrbs/kfan/app/account/internal/biz"
+	"github.com/starryrbs/kfan/app/account/internal/data/ent/account"
 )
 
 type accountRepo struct {
 	data *Data
 	log  *log.Helper
+}
+
+func (a *accountRepo) Login(ctx context.Context, username string) (*biz.Account, error) {
+	po, err := a.data.db.Account.Query().Where(account.Name(username)).Only(ctx)
+	if err != nil {
+		// 没有则创建一个
+		po, err = a.data.db.Account.Create().SetName(username).SetEmail("").SetSex(false).Save(ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return &biz.Account{
+		Id:    po.ID,
+		Name:  po.Name,
+		Email: po.Email,
+		Age:   po.Age,
+		Sex:   po.Sex,
+	}, nil
 }
 
 func (a *accountRepo) CreateAccount(ctx context.Context, account *biz.Account) (*biz.Account, error) {

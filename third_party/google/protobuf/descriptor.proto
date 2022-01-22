@@ -91,7 +91,8 @@ message FileDescriptorProto {
 }
 
 // Describes a message type.
-message DescriptorProto {
+message
+        DescriptorProto {
   optional string name = 1;
 
   repeated FieldDescriptorProto field = 2;

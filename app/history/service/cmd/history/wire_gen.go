@@ -11,7 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/starryrbs/kfan/app/history/service/internal/biz"
 	"github.com/starryrbs/kfan/app/history/service/internal/conf"
-	data2 "github.com/starryrbs/kfan/app/history/service/internal/data"
+	"github.com/starryrbs/kfan/app/history/service/internal/data"
 	"github.com/starryrbs/kfan/app/history/service/internal/server"
 	"github.com/starryrbs/kfan/app/history/service/internal/service"
 )
@@ -20,16 +20,17 @@ import (
 
 // initApp init kratos application.
 func initApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	asyncProducer := data2.NewKafkaProducer(confData)
-	dataData, cleanup, err := data2.NewData(asyncProducer, confData, logger)
+	asyncProducer := data.NewKafkaProducer(confData)
+	dataData, cleanup, err := data.NewData(asyncProducer, confData, logger)
 	if err != nil {
 		return nil, nil, err
 	}
-	historyRepo := data2.NewHistoryRepo(dataData, logger)
+	historyRepo := data.NewHistoryRepo(dataData, logger)
 	historyUseCase := biz.NewHistoryUseCase(historyRepo, logger)
 	historyService := service.NewHistoryService(historyUseCase)
 	grpcServer := server.NewGRPCServer(confServer, historyService, logger)
-	app := newApp(logger, grpcServer)
+	httpServer := server.NewHTTPServer(confServer, historyService, logger)
+	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()
 	}, nil

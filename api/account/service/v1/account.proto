@@ -28,6 +28,13 @@ service Account {
             get: "/v1/accounts"
         };
     };
+    rpc Login(LoginRequest) returns (LoginReply){
+        option (google.api.http) = {
+            post: "/v1/login",
+            body: "*"
+        };
+    };
+
 }
 
 message CreateAccountRequest {
@@ -62,4 +69,12 @@ message ListAccountReply {
         int64 age = 5;
     }
     repeated Account results = 1;
+}
+
+message LoginRequest{
+    string username = 1 [(validate.rules).string = {min_len: 1}];
+}
+
+message LoginReply{
+    int32 id = 1;
 }

@@ -50,3 +50,10 @@ func (a *AccountInterface) ListAccount(ctx context.Context, req *pb.ListAccountR
 		Results: rs,
 	}, nil
 }
+func (a *AccountInterface) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginReply, error) {
+	rv, err := a.ac.Repo.Login(ctx, req.Username)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.LoginReply{Id: int32(rv.Id)}, nil
+}
