@@ -18,6 +18,7 @@ type AccountRepo interface {
 	ListAccount(context.Context) ([]*Account, error)
 	CreateAccount(ctx context.Context, account *Account) (*Account, error)
 	Login(ctx context.Context, username string) (*Account, error)
+	GetAccount(ctx context.Context, id int) (*Account, error)
 }
 
 type AccountUseCase struct {

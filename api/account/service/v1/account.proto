@@ -28,7 +28,7 @@ service Account {
             get: "/v1/accounts"
         };
     };
-    rpc Login(LoginRequest) returns (LoginReply){
+    rpc Login(LoginRequest) returns (LoginReply) {
         option (google.api.http) = {
             post: "/v1/login",
             body: "*"
@@ -56,7 +56,13 @@ message DeleteAccountReply {}
 message GetAccountRequest {
     int32  id = 1;
 }
-message GetAccountReply {}
+message GetAccountReply {
+    int32 id = 1 ;
+    string name = 2;
+    bool sex = 3;
+    string email = 4;
+    int64 age = 5;
+}
 
 message ListAccountRequest {}
 
@@ -71,10 +77,10 @@ message ListAccountReply {
     repeated Account results = 1;
 }
 
-message LoginRequest{
+message LoginRequest {
     string username = 1 [(validate.rules).string = {min_len: 1}];
 }
 
-message LoginReply{
+message LoginReply {
     int32 id = 1;
 }

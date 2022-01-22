@@ -18,6 +18,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/wire"
 	consulAPI "github.com/hashicorp/consul/api"
+	accountv1 "github.com/starryrbs/kfan/api/account/service/v1"
 	housev1 "github.com/starryrbs/kfan/api/house/service/v1"
 	"github.com/starryrbs/kfan/app/history/service/internal/conf"
 	ent "github.com/starryrbs/kfan/app/history/service/internal/data/ent"
@@ -28,7 +29,8 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewHistoryRepo, NewKafkaProducer, NewHouseClient, NewDiscovery, NewRegistrar)
+var ProviderSet = wire.NewSet(NewData, NewHistoryRepo, NewKafkaProducer,
+	NewHouseClient, NewAccountClient, NewDiscovery, NewRegistrar)
 
 // Data .
 type Data struct {
@@ -37,10 +39,12 @@ type Data struct {
 	rdb *redis.Client
 	kp  sarama.AsyncProducer
 	h1  housev1.HouseClient
+	a1  accountv1.AccountClient
 }
 
 // NewData .
-func NewData(kp sarama.AsyncProducer, c *conf.Data, h1 housev1.HouseClient, logger log.Logger) (*Data, func(), error) {
+func NewData(kp sarama.AsyncProducer, c *conf.Data, h1 housev1.HouseClient,
+	a1 accountv1.AccountClient, logger log.Logger) (*Data, func(), error) {
 	log := log.NewHelper(logger)
 	drv, err := sql.Open(
 		c.Database.Driver,
@@ -84,6 +88,7 @@ func NewData(kp sarama.AsyncProducer, c *conf.Data, h1 housev1.HouseClient, logg
 		kp:  kp,
 		rdb: rdb,
 		h1:  h1,
+		a1:  a1,
 	}
 
 	return d, func() {
@@ -142,4 +147,20 @@ func NewHouseClient(r registry.Discovery) housev1.HouseClient {
 		panic(err)
 	}
 	return housev1.NewHouseClient(conn)
+}
+
+func NewAccountClient(r registry.Discovery) accountv1.AccountClient {
+	conn, err := grpc.DialInsecure(
+		context.Background(),
+		grpc.WithEndpoint("discovery:///kfan.account"),
+		grpc.WithDiscovery(r),
+		grpc.WithMiddleware(
+			tracing.Client(),
+			recovery.Recovery(),
+		),
+	)
+	if err != nil {
+		panic(err)
+	}
+	return accountv1.NewAccountClient(conn)
 }

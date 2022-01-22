@@ -30,7 +30,17 @@ func (a *AccountInterface) DeleteAccount(ctx context.Context, req *pb.DeleteAcco
 	return &pb.DeleteAccountReply{}, nil
 }
 func (a *AccountInterface) GetAccount(ctx context.Context, req *pb.GetAccountRequest) (*pb.GetAccountReply, error) {
-	return &pb.GetAccountReply{}, nil
+	rv, err := a.ac.Repo.GetAccount(ctx, int(req.Id))
+	if err != nil {
+		return nil, err
+	}
+	return &pb.GetAccountReply{
+		Id:    int32(rv.Id),
+		Name:  rv.Name,
+		Email: rv.Email,
+		Sex:   rv.Sex,
+		Age:   int64(rv.Age),
+	}, nil
 }
 func (a *AccountInterface) ListAccount(ctx context.Context, req *pb.ListAccountRequest) (*pb.ListAccountReply, error) {
 	rv, err := a.ac.Repo.ListAccount(ctx)

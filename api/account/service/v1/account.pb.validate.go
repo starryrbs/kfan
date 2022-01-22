@@ -852,6 +852,16 @@ func (m *GetAccountReply) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Id
+
+	// no validation rules for Name
+
+	// no validation rules for Sex
+
+	// no validation rules for Email
+
+	// no validation rules for Age
+
 	if len(errors) > 0 {
 		return GetAccountReplyMultiError(errors)
 	}

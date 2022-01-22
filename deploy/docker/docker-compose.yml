@@ -92,7 +92,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - kong_data:/var/lib/postgresql/data
+      - kong-data:/var/lib/postgresql/data
   kong-migrations:
     image: "${KONG_DOCKER_TAG:-kong:latest}"
     command: kong migrations bootstrap
@@ -144,7 +144,8 @@ services:
 volumes:
   kfan-db:
     external: true
-  kong_data: { }
+  kong-data:
+    external: true
   kong_prefix_vol:
     driver_opts:
       type: tmpfs

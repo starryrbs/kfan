@@ -23,7 +23,8 @@ func initApp(confServer *conf.Server, confData *conf.Data, registry *conf.Regist
 	asyncProducer := data.NewKafkaProducer(confData)
 	discovery := data.NewDiscovery(registry)
 	houseClient := data.NewHouseClient(discovery)
-	dataData, cleanup, err := data.NewData(asyncProducer, confData, houseClient, logger)
+	accountClient := data.NewAccountClient(discovery)
+	dataData, cleanup, err := data.NewData(asyncProducer, confData, houseClient, accountClient, logger)
 	if err != nil {
 		return nil, nil, err
 	}

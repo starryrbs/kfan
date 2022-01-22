@@ -3,19 +3,30 @@
 
 openapi: 3.0.3
 info:
-    title: History API
+    title: Account API
     version: 0.0.1
 paths:
-    /v1/history:
+    /v1/accounts:
+        get:
+            tags:
+                - Account
+            operationId: Account_ListAccount
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListAccountReply'
         post:
             tags:
-                - History
-            operationId: History_SaveHistory
+                - Account
+            operationId: Account_CreateAccount
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/SaveHistoryRequest'
+                            $ref: '#/components/schemas/CreateAccountRequest'
                 required: true
             responses:
                 "200":
@@ -23,22 +34,111 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/SaveHistoryReply'
+                                $ref: '#/components/schemas/CreateAccountReply'
+    /v1/accounts/{id}:
+        get:
+            tags:
+                - Account
+            operationId: Account_GetAccount
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetAccountReply'
+    /v1/login:
+        post:
+            tags:
+                - Account
+            operationId: Account_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/LoginRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/LoginReply'
 components:
     schemas:
-        SaveHistoryReply:
-            type: object
-            properties: {}
-        SaveHistoryRequest:
+        CreateAccountReply:
             type: object
             properties:
-                objId:
+                id:
                     type: integer
-                    format: int64
-                objType:
+                    format: int32
+        CreateAccountRequest:
+            type: object
+            properties:
+                name:
                     type: string
-                userId:
+                sex:
+                    type: boolean
+                email:
+                    type: string
+                age:
                     type: integer
                     format: int64
+        GetAccountReply:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+                name:
+                    type: string
+                sex:
+                    type: boolean
+                email:
+                    type: string
+                age:
+                    type: integer
+                    format: int64
+        ListAccountReply:
+            type: object
+            properties:
+                results:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ListAccountReply_Account'
+        ListAccountReply_Account:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+                name:
+                    type: string
+                sex:
+                    type: boolean
+                email:
+                    type: string
+                age:
+                    type: integer
+                    format: int64
+        LoginReply:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int32
+        LoginRequest:
+            type: object
+            properties:
+                username:
+                    type: string
 tags:
-    - name: History
+    - name: Account

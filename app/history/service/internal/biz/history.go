@@ -12,6 +12,7 @@ type History struct {
 	UserId    int64
 	CreateAt  float64
 	ObjDetail map[string]interface{}
+	Username  string
 }
 
 type HistoryRepo interface {

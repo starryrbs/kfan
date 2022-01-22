@@ -12,9 +12,9 @@
 - [x] API 设计（包括 API 定义、错误码规范、Error 的使用）
 - [x] gRPC 的使用
 - [x] Go 项目工程化（项目结构、DI、代码分层、ORM 框架）
-- [ ] 并发的使用（errgroup 的并行链路请求）
+- [x] 并发的使用（errgroup 的并行链路请求）
 - [x] 微服务中间件的使用（ELK、Opentracing、Prometheus、Kafka） ([链路追踪](./docs/链路追踪.md))
-- [ ] 缓存的使用优化（一致性处理、Pipeline 优化）
+- [x] 缓存的使用优化（一致性处理、Pipeline 优化）
 
 ## 项目目录结构
 

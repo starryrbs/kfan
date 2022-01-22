@@ -50,6 +50,7 @@ func (s *HistoryService) GetHistory(ctx context.Context, req *pb.GetHistoryReque
 			ObjId:     rv.ObjId,
 			CreateAt:  timestamppb.New(time.Unix(int64(rv.CreateAt), 0)),
 			ObjDetail: objDetail,
+			Username:  rv.Username,
 		})
 	}
 	return &pb.GetHistoryReply{

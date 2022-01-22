@@ -13,6 +13,20 @@ type accountRepo struct {
 	log  *log.Helper
 }
 
+func (a *accountRepo) GetAccount(ctx context.Context, id int) (*biz.Account, error) {
+	po, err := a.data.db.Account.Query().Where(account.ID(id)).Only(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &biz.Account{
+		Id:    po.ID,
+		Name:  po.Name,
+		Email: po.Email,
+		Age:   po.Age,
+		Sex:   po.Sex,
+	}, nil
+}
+
 func (a *accountRepo) Login(ctx context.Context, username string) (*biz.Account, error) {
 	po, err := a.data.db.Account.Query().Where(account.Name(username)).Only(ctx)
 	if err != nil {
