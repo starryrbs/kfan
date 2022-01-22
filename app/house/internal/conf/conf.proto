@@ -10,6 +10,7 @@ message Bootstrap {
   Server server = 2;
   Data data = 3;
   Auth auth = 4;
+  Registry registry = 5;
 }
 
 message Trace {
@@ -48,4 +49,12 @@ message Data {
   }
   Database database = 1;
   Redis redis = 2;
+}
+
+message Registry {
+  message Consul {
+    string address = 1;
+    string scheme = 2;
+  }
+  Consul consul = 1;
 }

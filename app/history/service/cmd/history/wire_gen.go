@@ -19,9 +19,11 @@ import (
 // Injectors from wire.go:
 
 // initApp init kratos application.
-func initApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
+func initApp(confServer *conf.Server, confData *conf.Data, registry *conf.Registry, logger log.Logger) (*kratos.App, func(), error) {
 	asyncProducer := data.NewKafkaProducer(confData)
-	dataData, cleanup, err := data.NewData(asyncProducer, confData, logger)
+	discovery := data.NewDiscovery(registry)
+	houseClient := data.NewHouseClient(discovery)
+	dataData, cleanup, err := data.NewData(asyncProducer, confData, houseClient, logger)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -30,7 +32,8 @@ func initApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	historyService := service.NewHistoryService(historyUseCase)
 	grpcServer := server.NewGRPCServer(confServer, historyService, logger)
 	httpServer := server.NewHTTPServer(confServer, historyService, logger)
-	app := newApp(logger, grpcServer, httpServer)
+	registrar := data.NewRegistrar(registry)
+	app := newApp(logger, grpcServer, httpServer, registrar)
 	return app, func() {
 		cleanup()
 	}, nil

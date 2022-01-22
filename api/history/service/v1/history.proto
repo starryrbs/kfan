@@ -4,6 +4,7 @@ package api.history.service.v1;
 
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
 import "validate/validate.proto";
 
 option go_package = "github.com/starryrbs/kfan/api/history/service/v1;v1";
@@ -35,6 +36,7 @@ message GetHistoryReply {
         int64 obj_id = 1;
         string obj_type = 2;
         google.protobuf.Timestamp create_at = 3;
+        google.protobuf.Struct obj_detail = 4;
     }
     repeated History results = 1;
 }

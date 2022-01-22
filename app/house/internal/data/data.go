@@ -5,9 +5,12 @@ import (
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"fmt"
+	"github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/registry"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/wire"
+	consulAPI "github.com/hashicorp/consul/api"
 	"github.com/starryrbs/kfan/app/house/internal/conf"
 	"github.com/starryrbs/kfan/app/house/internal/data/ent"
 	"go.opentelemetry.io/otel"
@@ -16,7 +19,7 @@ import (
 )
 
 // ProviderSet2 is data providers.
-var ProviderSet2 = wire.NewSet(NewData, NewHouseRepo)
+var ProviderSet2 = wire.NewSet(NewData, NewHouseRepo, NewRegistrar)
 
 // Data .
 type Data struct {
@@ -64,4 +67,16 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 			log.Error(err)
 		}
 	}, nil
+}
+
+func NewRegistrar(conf *conf.Registry) registry.Registrar {
+	c := consulAPI.DefaultConfig()
+	c.Address = conf.Consul.Address
+	c.Scheme = conf.Consul.Scheme
+	cli, err := consulAPI.NewClient(c)
+	if err != nil {
+		panic(err)
+	}
+	r := consul.New(cli, consul.WithHealthCheck(false))
+	return r
 }

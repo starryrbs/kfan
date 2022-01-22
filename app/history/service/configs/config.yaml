@@ -24,3 +24,8 @@ data:
       - 127.0.0.1:9092
     topic: 'history'
     groupId: 'history.v1'
+
+registry:
+  consul:
+    address: 127.0.0.1:8500
+    scheme: http

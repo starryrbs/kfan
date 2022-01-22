@@ -9,6 +9,7 @@ message Bootstrap {
   Server server = 1;
   Data data = 2;
   Trace trace = 3;
+  Registry registry = 4;
 }
 
 message Trace {

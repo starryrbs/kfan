@@ -4,7 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/Shopify/sarama"
+	"github.com/fatih/structs"
 	"github.com/go-kratos/kratos/v2/log"
+	pb "github.com/starryrbs/kfan/api/house/service/v1"
 	"github.com/starryrbs/kfan/app/history/service/internal/biz"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/Shopify/sarama/otelsarama"
 	"go.opentelemetry.io/otel"
@@ -60,7 +62,19 @@ func (h historyRepo) SaveHistory(ctx context.Context, history *biz.History) (*bi
 }
 
 func (h historyRepo) GetHistory(ctx context.Context, id int64) ([]*biz.History, error) {
-	return h.GetHistoryCache(ctx, id)
+	histories, err := h.GetHistoryCache(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	for _, history := range histories {
+		house, err := h.data.h1.GetHouse(ctx, &pb.GetHouseRequest{Id: history.ObjId})
+		if err != nil {
+			return nil, err
+		}
+		history.ObjDetail = structs.Map(house)
+	}
+
+	return histories, nil
 }
 
 // NewHistoryRepo .

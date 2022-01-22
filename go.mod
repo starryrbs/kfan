@@ -6,6 +6,7 @@ require (
 	entgo.io/ent v0.9.1
 	github.com/Shopify/sarama v1.31.0
 	github.com/envoyproxy/protoc-gen-validate v0.1.0
+	github.com/fatih/structs v1.1.0
 	github.com/go-kratos/kratos/contrib/registry/consul/v2 v2.0.0-20220119103646-f050b0743222
 	github.com/go-kratos/kratos/v2 v2.1.4
 	github.com/go-redis/redis/extra/redisotel v0.3.0

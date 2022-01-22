@@ -6,10 +6,11 @@ import (
 )
 
 type History struct {
-	ObjId    int64
-	ObjType  string
-	UserId   int64
-	CreateAt float64
+	ObjId     int64
+	ObjType   string
+	UserId    int64
+	CreateAt  float64
+	ObjDetail map[string]interface{}
 }
 
 type HistoryRepo interface {

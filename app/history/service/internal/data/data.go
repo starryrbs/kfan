@@ -6,11 +6,18 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"fmt"
 	"github.com/Shopify/sarama"
+	"github.com/go-kratos/kratos/contrib/registry/consul/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-kratos/kratos/v2/middleware/recovery"
+	"github.com/go-kratos/kratos/v2/middleware/tracing"
+	"github.com/go-kratos/kratos/v2/registry"
+	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-redis/redis/extra/redisotel"
 	"github.com/go-redis/redis/v8"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/wire"
+	consulAPI "github.com/hashicorp/consul/api"
+	housev1 "github.com/starryrbs/kfan/api/house/service/v1"
 	"github.com/starryrbs/kfan/app/history/service/internal/conf"
 	ent "github.com/starryrbs/kfan/app/history/service/internal/data/ent"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/Shopify/sarama/otelsarama"
@@ -20,7 +27,7 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewHistoryRepo, NewKafkaProducer)
+var ProviderSet = wire.NewSet(NewData, NewHistoryRepo, NewKafkaProducer, NewHouseClient, NewDiscovery, NewRegistrar)
 
 // Data .
 type Data struct {
@@ -28,10 +35,11 @@ type Data struct {
 	db  *ent.Client
 	rdb *redis.Client
 	kp  sarama.AsyncProducer
+	h1  housev1.HouseClient
 }
 
 // NewData .
-func NewData(kp sarama.AsyncProducer, c *conf.Data, logger log.Logger) (*Data, func(), error) {
+func NewData(kp sarama.AsyncProducer, c *conf.Data, h1 housev1.HouseClient, logger log.Logger) (*Data, func(), error) {
 	log := log.NewHelper(logger)
 	drv, err := sql.Open(
 		c.Database.Driver,
@@ -74,6 +82,7 @@ func NewData(kp sarama.AsyncProducer, c *conf.Data, logger log.Logger) (*Data, f
 		db:  client,
 		kp:  kp,
 		rdb: rdb,
+		h1:  h1,
 	}
 
 	return d, func() {
@@ -92,4 +101,44 @@ func NewKafkaProducer(conf *conf.Data) sarama.AsyncProducer {
 		panic(err)
 	}
 	return p
+}
+
+func NewDiscovery(conf *conf.Registry) registry.Discovery {
+	c := consulAPI.DefaultConfig()
+	c.Address = conf.Consul.Address
+	c.Scheme = conf.Consul.Scheme
+	cli, err := consulAPI.NewClient(c)
+	if err != nil {
+		panic(err)
+	}
+	r := consul.New(cli, consul.WithHealthCheck(false))
+	return r
+}
+
+func NewRegistrar(conf *conf.Registry) registry.Registrar {
+	c := consulAPI.DefaultConfig()
+	c.Address = conf.Consul.Address
+	c.Scheme = conf.Consul.Scheme
+	cli, err := consulAPI.NewClient(c)
+	if err != nil {
+		panic(err)
+	}
+	r := consul.New(cli, consul.WithHealthCheck(false))
+	return r
+}
+
+func NewHouseClient(r registry.Discovery) housev1.HouseClient {
+	conn, err := grpc.DialInsecure(
+		context.Background(),
+		grpc.WithEndpoint("discovery:///kfan.house"),
+		grpc.WithDiscovery(r),
+		grpc.WithMiddleware(
+			tracing.Client(),
+			recovery.Recovery(),
+		),
+	)
+	if err != nil {
+		panic(err)
+	}
+	return housev1.NewHouseClient(conn)
 }

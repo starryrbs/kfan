@@ -135,6 +135,11 @@ services:
       - "9411:9411"
     environment:
       COLLECTOR_ZIPKIN_HOST_PORT: ":9411"
+  consul:
+    image: consul:1.6.1
+    ports:
+      - "8500:8500"
+    command: ["agent","-server", "-bootstrap","-ui","-node=1","-client=0.0.0.0"]
 
 volumes:
   kfan-db:

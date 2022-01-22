@@ -14,12 +14,10 @@ import (
 	"github.com/starryrbs/kfan/app/account/internal/data"
 	"github.com/starryrbs/kfan/app/account/internal/server"
 	"github.com/starryrbs/kfan/app/account/internal/service"
-
-	tracesdk "go.opentelemetry.io/otel/sdk/trace"
 )
 
 // initApp init kratos application.
-func initApp(*conf.Server, *conf.Data, log.Logger, *tracesdk.TracerProvider) (*kratos.App, func(), error) {
+func initApp(*conf.Server, *conf.Data, *conf.Registry, log.Logger) (*kratos.App, func(), error) {
 	panic(wire.Build(server.ProviderSet,
 		data.ProviderSet,
 		biz.ProviderSet,

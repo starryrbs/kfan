@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"github.com/starryrbs/kfan/app/history/service/internal/biz"
+	"google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"time"
 
@@ -38,10 +39,15 @@ func (s *HistoryService) GetHistory(ctx context.Context, req *pb.GetHistoryReque
 
 	results := make([]*pb.GetHistoryReply_History, 0)
 	for _, rv := range rvs {
+		objDetail, err := structpb.NewStruct(rv.ObjDetail)
+		if err != nil {
+			return nil, err
+		}
 		results = append(results, &pb.GetHistoryReply_History{
-			ObjType:  rv.ObjType,
-			ObjId:    rv.ObjId,
-			CreateAt: timestamppb.New(time.Unix(int64(rv.CreateAt), 0)),
+			ObjType:   rv.ObjType,
+			ObjId:     rv.ObjId,
+			CreateAt:  timestamppb.New(time.Unix(int64(rv.CreateAt), 0)),
+			ObjDetail: objDetail,
 		})
 	}
 	return &pb.GetHistoryReply{
