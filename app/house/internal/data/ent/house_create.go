@@ -37,6 +37,20 @@ func (hc *HouseCreate) SetCommunity(s string) *HouseCreate {
 	return hc
 }
 
+// SetImage sets the "image" field.
+func (hc *HouseCreate) SetImage(s string) *HouseCreate {
+	hc.mutation.SetImage(s)
+	return hc
+}
+
+// SetNillableImage sets the "image" field if the given value is not nil.
+func (hc *HouseCreate) SetNillableImage(s *string) *HouseCreate {
+	if s != nil {
+		hc.SetImage(*s)
+	}
+	return hc
+}
+
 // SetToiletCount sets the "toilet_count" field.
 func (hc *HouseCreate) SetToiletCount(i int32) *HouseCreate {
 	hc.mutation.SetToiletCount(i)
@@ -184,6 +198,10 @@ func (hc *HouseCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (hc *HouseCreate) defaults() {
+	if _, ok := hc.mutation.Image(); !ok {
+		v := house.DefaultImage
+		hc.mutation.SetImage(v)
+	}
 	if _, ok := hc.mutation.ToiletCount(); !ok {
 		v := house.DefaultToiletCount
 		hc.mutation.SetToiletCount(v)
@@ -221,6 +239,9 @@ func (hc *HouseCreate) check() error {
 	}
 	if _, ok := hc.mutation.Community(); !ok {
 		return &ValidationError{Name: "community", err: errors.New(`ent: missing required field "community"`)}
+	}
+	if _, ok := hc.mutation.Image(); !ok {
+		return &ValidationError{Name: "image", err: errors.New(`ent: missing required field "image"`)}
 	}
 	if _, ok := hc.mutation.ToiletCount(); !ok {
 		return &ValidationError{Name: "toilet_count", err: errors.New(`ent: missing required field "toilet_count"`)}
@@ -293,6 +314,14 @@ func (hc *HouseCreate) createSpec() (*House, *sqlgraph.CreateSpec) {
 			Column: house.FieldCommunity,
 		})
 		_node.Community = value
+	}
+	if value, ok := hc.mutation.Image(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: house.FieldImage,
+		})
+		_node.Image = value
 	}
 	if value, ok := hc.mutation.ToiletCount(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

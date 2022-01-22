@@ -35,6 +35,7 @@ type HouseMutation struct {
 	add_Price        *float64
 	title            *string
 	community        *string
+	image            *string
 	toilet_count     *int32
 	addtoilet_count  *int32
 	kitchen_count    *int32
@@ -262,6 +263,42 @@ func (m *HouseMutation) OldCommunity(ctx context.Context) (v string, err error) 
 // ResetCommunity resets all changes to the "community" field.
 func (m *HouseMutation) ResetCommunity() {
 	m.community = nil
+}
+
+// SetImage sets the "image" field.
+func (m *HouseMutation) SetImage(s string) {
+	m.image = &s
+}
+
+// Image returns the value of the "image" field in the mutation.
+func (m *HouseMutation) Image() (r string, exists bool) {
+	v := m.image
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldImage returns the old "image" field's value of the House entity.
+// If the House object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *HouseMutation) OldImage(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldImage is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldImage requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldImage: %w", err)
+	}
+	return oldValue.Image, nil
+}
+
+// ResetImage resets all changes to the "image" field.
+func (m *HouseMutation) ResetImage() {
+	m.image = nil
 }
 
 // SetToiletCount sets the "toilet_count" field.
@@ -563,7 +600,7 @@ func (m *HouseMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *HouseMutation) Fields() []string {
-	fields := make([]string, 0, 8)
+	fields := make([]string, 0, 9)
 	if m._Price != nil {
 		fields = append(fields, house.FieldPrice)
 	}
@@ -572,6 +609,9 @@ func (m *HouseMutation) Fields() []string {
 	}
 	if m.community != nil {
 		fields = append(fields, house.FieldCommunity)
+	}
+	if m.image != nil {
+		fields = append(fields, house.FieldImage)
 	}
 	if m.toilet_count != nil {
 		fields = append(fields, house.FieldToiletCount)
@@ -602,6 +642,8 @@ func (m *HouseMutation) Field(name string) (ent.Value, bool) {
 		return m.Title()
 	case house.FieldCommunity:
 		return m.Community()
+	case house.FieldImage:
+		return m.Image()
 	case house.FieldToiletCount:
 		return m.ToiletCount()
 	case house.FieldKitchenCount:
@@ -627,6 +669,8 @@ func (m *HouseMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldTitle(ctx)
 	case house.FieldCommunity:
 		return m.OldCommunity(ctx)
+	case house.FieldImage:
+		return m.OldImage(ctx)
 	case house.FieldToiletCount:
 		return m.OldToiletCount(ctx)
 	case house.FieldKitchenCount:
@@ -666,6 +710,13 @@ func (m *HouseMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCommunity(v)
+		return nil
+	case house.FieldImage:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetImage(v)
 		return nil
 	case house.FieldToiletCount:
 		v, ok := value.(int32)
@@ -834,6 +885,9 @@ func (m *HouseMutation) ResetField(name string) error {
 		return nil
 	case house.FieldCommunity:
 		m.ResetCommunity()
+		return nil
+	case house.FieldImage:
+		m.ResetImage()
 		return nil
 	case house.FieldToiletCount:
 		m.ResetToiletCount()

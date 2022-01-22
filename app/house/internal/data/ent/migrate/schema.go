@@ -14,6 +14,7 @@ var (
 		{Name: "price", Type: field.TypeFloat64},
 		{Name: "title", Type: field.TypeString},
 		{Name: "community", Type: field.TypeString},
+		{Name: "image", Type: field.TypeString, Default: ""},
 		{Name: "toilet_count", Type: field.TypeInt32, Default: 0},
 		{Name: "kitchen_count", Type: field.TypeInt32, Default: 0},
 		{Name: "floor_count", Type: field.TypeInt32, Default: 0},

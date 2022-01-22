@@ -36,6 +36,8 @@ message CreateHouseRequest {
     int32 toilet_count = 5;
     int32 hall_count = 6;
     int32 room_count = 7;
+    string image = 8 [(validate.rules).string.uri = true];
+
 }
 message CreateHouseReply {
     int64 id = 1;
@@ -62,6 +64,7 @@ message ListHouseReply {
         string title = 1;
         string community = 2;
         string description = 3;
+        string image = 4;
     }
     repeated House results = 1;
 }

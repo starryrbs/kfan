@@ -111,6 +111,13 @@ func Community(v string) predicate.House {
 	})
 }
 
+// Image applies equality check predicate on the "image" field. It's identical to ImageEQ.
+func Image(v string) predicate.House {
+	return predicate.House(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldImage), v))
+	})
+}
+
 // ToiletCount applies equality check predicate on the "toilet_count" field. It's identical to ToiletCountEQ.
 func ToiletCount(v int32) predicate.House {
 	return predicate.House(func(s *sql.Selector) {
@@ -441,6 +448,117 @@ func CommunityEqualFold(v string) predicate.House {
 func CommunityContainsFold(v string) predicate.House {
 	return predicate.House(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldCommunity), v))
+	})
+}
+
+// ImageEQ applies the EQ predicate on the "image" field.
+func ImageEQ(v string) predicate.House {
+	return predicate.House(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldImage), v))
+	})
+}
+
+// ImageNEQ applies the NEQ predicate on the "image" field.
+func ImageNEQ(v string) predicate.House {
+	return predicate.House(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldImage), v))
+	})
+}
+
+// ImageIn applies the In predicate on the "image" field.
+func ImageIn(vs ...string) predicate.House {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.House(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldImage), v...))
+	})
+}
+
+// ImageNotIn applies the NotIn predicate on the "image" field.
+func ImageNotIn(vs ...string) predicate.House {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.House(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldImage), v...))
+	})
+}
+
+// ImageGT applies the GT predicate on the "image" field.
+func ImageGT(v string) predicate.House {
+	return predicate.House(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldImage), v))
+	})
+}
+
+// ImageGTE applies the GTE predicate on the "image" field.
+func ImageGTE(v string) predicate.House {
+	return predicate.House(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldImage), v))
+	})
+}
+
+// ImageLT applies the LT predicate on the "image" field.
+func ImageLT(v string) predicate.House {
+	return predicate.House(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldImage), v))
+	})
+}
+
+// ImageLTE applies the LTE predicate on the "image" field.
+func ImageLTE(v string) predicate.House {
+	return predicate.House(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldImage), v))
+	})
+}
+
+// ImageContains applies the Contains predicate on the "image" field.
+func ImageContains(v string) predicate.House {
+	return predicate.House(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldImage), v))
+	})
+}
+
+// ImageHasPrefix applies the HasPrefix predicate on the "image" field.
+func ImageHasPrefix(v string) predicate.House {
+	return predicate.House(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldImage), v))
+	})
+}
+
+// ImageHasSuffix applies the HasSuffix predicate on the "image" field.
+func ImageHasSuffix(v string) predicate.House {
+	return predicate.House(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldImage), v))
+	})
+}
+
+// ImageEqualFold applies the EqualFold predicate on the "image" field.
+func ImageEqualFold(v string) predicate.House {
+	return predicate.House(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldImage), v))
+	})
+}
+
+// ImageContainsFold applies the ContainsFold predicate on the "image" field.
+func ImageContainsFold(v string) predicate.House {
+	return predicate.House(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldImage), v))
 	})
 }
 

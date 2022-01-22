@@ -31,6 +31,7 @@ func (s *HouseService) CreateHouse(ctx context.Context, req *pb.CreateHouseReque
 		FloorCount:   req.FloorCount,
 		HallCount:    req.HallCount,
 		RoomCount:    req.RoomCount,
+		Image:        req.Image,
 	}
 
 	rv, err := s.hc.Repo.CreateHouse(ctx, house)
@@ -74,6 +75,7 @@ func (s *HouseService) ListHouse(ctx context.Context, req *pb.ListHouseRequest) 
 			Community: rv.Community,
 			Description: fmt.Sprintf("%d室%d厅%d卫%d厨",
 				rv.RoomCount, rv.HallCount, rv.ToiletCount, rv.KitchenCount),
+			Image: rv.Image,
 		})
 	}
 

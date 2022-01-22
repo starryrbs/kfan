@@ -29,6 +29,7 @@ func (r *houseRepo) ListHouse(ctx context.Context) ([]*biz.House, error) {
 			FloorCount:   po.FloorCount,
 			HallCount:    po.HallCount,
 			RoomCount:    po.RoomCount,
+			Image:        po.Image,
 		})
 	}
 	return rv, nil
@@ -49,6 +50,7 @@ func (r *houseRepo) GetHouse(ctx context.Context, id int64) (*biz.House, error) 
 		FloorCount:   po.FloorCount,
 		HallCount:    po.HallCount,
 		RoomCount:    po.RoomCount,
+		Image:        po.Image,
 	}, nil
 }
 
@@ -60,6 +62,7 @@ func (r *houseRepo) CreateHouse(ctx context.Context, house *biz.House) (*biz.Hou
 		SetKitchenCount(house.KitchenCount).
 		SetPrice(0).
 		SetTitle(house.Title).
+		SetImage(house.Image).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -74,6 +77,7 @@ func (r *houseRepo) CreateHouse(ctx context.Context, house *biz.House) (*biz.Hou
 		FloorCount:   po.FloorCount,
 		HallCount:    po.HallCount,
 		RoomCount:    po.RoomCount,
+		Image:        po.Image,
 	}, nil
 }
 

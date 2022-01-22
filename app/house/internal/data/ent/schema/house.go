@@ -17,6 +17,7 @@ func (House) Fields() []ent.Field {
 		field.Float("Price"),
 		field.String("title").MinLen(1),
 		field.String("community"),
+		field.String("image").Default(""),
 		field.Int32("toilet_count").Default(0),
 		field.Int32("kitchen_count").Default(0),
 		field.Int32("floor_count").Default(0),

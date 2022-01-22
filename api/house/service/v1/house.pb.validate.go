@@ -89,6 +89,27 @@ func (m *CreateHouseRequest) validate(all bool) error {
 
 	// no validation rules for RoomCount
 
+	if uri, err := url.Parse(m.GetImage()); err != nil {
+		err = CreateHouseRequestValidationError{
+			field:  "Image",
+			reason: "value must be a valid URI",
+			cause:  err,
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	} else if !uri.IsAbs() {
+		err := CreateHouseRequestValidationError{
+			field:  "Image",
+			reason: "value must be absolute",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if len(errors) > 0 {
 		return CreateHouseRequestMultiError(errors)
 	}
@@ -752,6 +773,8 @@ func (m *ListHouseReply_House) validate(all bool) error {
 	// no validation rules for Community
 
 	// no validation rules for Description
+
+	// no validation rules for Image
 
 	if len(errors) > 0 {
 		return ListHouseReply_HouseMultiError(errors)

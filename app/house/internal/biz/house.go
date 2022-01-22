@@ -15,6 +15,7 @@ type House struct {
 	FloorCount   int32
 	HallCount    int32
 	RoomCount    int32
+	Image        string
 }
 
 type HouseRepo interface {

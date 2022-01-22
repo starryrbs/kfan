@@ -21,6 +21,8 @@ type House struct {
 	Title string `json:"title,omitempty"`
 	// Community holds the value of the "community" field.
 	Community string `json:"community,omitempty"`
+	// Image holds the value of the "image" field.
+	Image string `json:"image,omitempty"`
 	// ToiletCount holds the value of the "toilet_count" field.
 	ToiletCount int32 `json:"toilet_count,omitempty"`
 	// KitchenCount holds the value of the "kitchen_count" field.
@@ -42,7 +44,7 @@ func (*House) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullFloat64)
 		case house.FieldID, house.FieldToiletCount, house.FieldKitchenCount, house.FieldFloorCount, house.FieldHallCount, house.FieldRoomCount:
 			values[i] = new(sql.NullInt64)
-		case house.FieldTitle, house.FieldCommunity:
+		case house.FieldTitle, house.FieldCommunity, house.FieldImage:
 			values[i] = new(sql.NullString)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type House", columns[i])
@@ -82,6 +84,12 @@ func (h *House) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field community", values[i])
 			} else if value.Valid {
 				h.Community = value.String
+			}
+		case house.FieldImage:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field image", values[i])
+			} else if value.Valid {
+				h.Image = value.String
 			}
 		case house.FieldToiletCount:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -147,6 +155,8 @@ func (h *House) String() string {
 	builder.WriteString(h.Title)
 	builder.WriteString(", community=")
 	builder.WriteString(h.Community)
+	builder.WriteString(", image=")
+	builder.WriteString(h.Image)
 	builder.WriteString(", toilet_count=")
 	builder.WriteString(fmt.Sprintf("%v", h.ToiletCount))
 	builder.WriteString(", kitchen_count=")

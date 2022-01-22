@@ -17,24 +17,28 @@ func init() {
 	houseDescTitle := houseFields[2].Descriptor()
 	// house.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	house.TitleValidator = houseDescTitle.Validators[0].(func(string) error)
+	// houseDescImage is the schema descriptor for image field.
+	houseDescImage := houseFields[4].Descriptor()
+	// house.DefaultImage holds the default value on creation for the image field.
+	house.DefaultImage = houseDescImage.Default.(string)
 	// houseDescToiletCount is the schema descriptor for toilet_count field.
-	houseDescToiletCount := houseFields[4].Descriptor()
+	houseDescToiletCount := houseFields[5].Descriptor()
 	// house.DefaultToiletCount holds the default value on creation for the toilet_count field.
 	house.DefaultToiletCount = houseDescToiletCount.Default.(int32)
 	// houseDescKitchenCount is the schema descriptor for kitchen_count field.
-	houseDescKitchenCount := houseFields[5].Descriptor()
+	houseDescKitchenCount := houseFields[6].Descriptor()
 	// house.DefaultKitchenCount holds the default value on creation for the kitchen_count field.
 	house.DefaultKitchenCount = houseDescKitchenCount.Default.(int32)
 	// houseDescFloorCount is the schema descriptor for floor_count field.
-	houseDescFloorCount := houseFields[6].Descriptor()
+	houseDescFloorCount := houseFields[7].Descriptor()
 	// house.DefaultFloorCount holds the default value on creation for the floor_count field.
 	house.DefaultFloorCount = houseDescFloorCount.Default.(int32)
 	// houseDescHallCount is the schema descriptor for hall_count field.
-	houseDescHallCount := houseFields[7].Descriptor()
+	houseDescHallCount := houseFields[8].Descriptor()
 	// house.DefaultHallCount holds the default value on creation for the hall_count field.
 	house.DefaultHallCount = houseDescHallCount.Default.(int32)
 	// houseDescRoomCount is the schema descriptor for room_count field.
-	houseDescRoomCount := houseFields[8].Descriptor()
+	houseDescRoomCount := houseFields[9].Descriptor()
 	// house.DefaultRoomCount holds the default value on creation for the room_count field.
 	house.DefaultRoomCount = houseDescRoomCount.Default.(int32)
 }

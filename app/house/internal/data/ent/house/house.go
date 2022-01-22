@@ -13,6 +13,8 @@ const (
 	FieldTitle = "title"
 	// FieldCommunity holds the string denoting the community field in the database.
 	FieldCommunity = "community"
+	// FieldImage holds the string denoting the image field in the database.
+	FieldImage = "image"
 	// FieldToiletCount holds the string denoting the toilet_count field in the database.
 	FieldToiletCount = "toilet_count"
 	// FieldKitchenCount holds the string denoting the kitchen_count field in the database.
@@ -33,6 +35,7 @@ var Columns = []string{
 	FieldPrice,
 	FieldTitle,
 	FieldCommunity,
+	FieldImage,
 	FieldToiletCount,
 	FieldKitchenCount,
 	FieldFloorCount,
@@ -53,6 +56,8 @@ func ValidColumn(column string) bool {
 var (
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
+	// DefaultImage holds the default value on creation for the "image" field.
+	DefaultImage string
 	// DefaultToiletCount holds the default value on creation for the "toilet_count" field.
 	DefaultToiletCount int32
 	// DefaultKitchenCount holds the default value on creation for the "kitchen_count" field.

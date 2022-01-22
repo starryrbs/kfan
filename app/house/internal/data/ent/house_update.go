@@ -51,6 +51,20 @@ func (hu *HouseUpdate) SetCommunity(s string) *HouseUpdate {
 	return hu
 }
 
+// SetImage sets the "image" field.
+func (hu *HouseUpdate) SetImage(s string) *HouseUpdate {
+	hu.mutation.SetImage(s)
+	return hu
+}
+
+// SetNillableImage sets the "image" field if the given value is not nil.
+func (hu *HouseUpdate) SetNillableImage(s *string) *HouseUpdate {
+	if s != nil {
+		hu.SetImage(*s)
+	}
+	return hu
+}
+
 // SetToiletCount sets the "toilet_count" field.
 func (hu *HouseUpdate) SetToiletCount(i int32) *HouseUpdate {
 	hu.mutation.ResetToiletCount()
@@ -277,6 +291,13 @@ func (hu *HouseUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: house.FieldCommunity,
 		})
 	}
+	if value, ok := hu.mutation.Image(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: house.FieldImage,
+		})
+	}
 	if value, ok := hu.mutation.ToiletCount(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt32,
@@ -388,6 +409,20 @@ func (huo *HouseUpdateOne) SetTitle(s string) *HouseUpdateOne {
 // SetCommunity sets the "community" field.
 func (huo *HouseUpdateOne) SetCommunity(s string) *HouseUpdateOne {
 	huo.mutation.SetCommunity(s)
+	return huo
+}
+
+// SetImage sets the "image" field.
+func (huo *HouseUpdateOne) SetImage(s string) *HouseUpdateOne {
+	huo.mutation.SetImage(s)
+	return huo
+}
+
+// SetNillableImage sets the "image" field if the given value is not nil.
+func (huo *HouseUpdateOne) SetNillableImage(s *string) *HouseUpdateOne {
+	if s != nil {
+		huo.SetImage(*s)
+	}
 	return huo
 }
 
@@ -639,6 +674,13 @@ func (huo *HouseUpdateOne) sqlSave(ctx context.Context) (_node *House, err error
 			Type:   field.TypeString,
 			Value:  value,
 			Column: house.FieldCommunity,
+		})
+	}
+	if value, ok := huo.mutation.Image(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: house.FieldImage,
 		})
 	}
 	if value, ok := huo.mutation.ToiletCount(); ok {

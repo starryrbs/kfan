@@ -3,8 +3,134 @@
 
 openapi: 3.0.3
 info:
-    title: ""
+    title: House API
     version: 0.0.1
-paths: {}
+paths:
+    /v1/houses:
+        get:
+            tags:
+                - House
+            operationId: House_ListHouse
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListHouseReply'
+        post:
+            tags:
+                - House
+            operationId: House_CreateHouse
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateHouseRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateHouseReply'
+    /v1/houses/{id}:
+        get:
+            tags:
+                - House
+            operationId: House_GetHouse
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: integer
+                    format: int64
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetHouseReply'
 components:
-    schemas: {}
+    schemas:
+        CreateHouseReply:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+        CreateHouseRequest:
+            type: object
+            properties:
+                title:
+                    type: string
+                community:
+                    type: string
+                floorCount:
+                    type: integer
+                    format: int32
+                kitchenCount:
+                    type: integer
+                    format: int32
+                toiletCount:
+                    type: integer
+                    format: int32
+                hallCount:
+                    type: integer
+                    format: int32
+                roomCount:
+                    type: integer
+                    format: int32
+                image:
+                    type: string
+        GetHouseReply:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                title:
+                    type: string
+                community:
+                    type: string
+                floorCount:
+                    type: integer
+                    format: int32
+                kitchenCount:
+                    type: integer
+                    format: int32
+                toiletCount:
+                    type: integer
+                    format: int32
+                hallCount:
+                    type: integer
+                    format: int32
+                roomCount:
+                    type: integer
+                    format: int32
+        ListHouseReply:
+            type: object
+            properties:
+                results:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/ListHouseReply_House'
+        ListHouseReply_House:
+            type: object
+            properties:
+                id:
+                    type: integer
+                    format: int64
+                title:
+                    type: string
+                community:
+                    type: string
+                description:
+                    type: string
+                image:
+                    type: string
+tags:
+    - name: House
