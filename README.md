@@ -13,7 +13,7 @@
 - [x] gRPC 的使用
 - [x] Go 项目工程化（项目结构、DI、代码分层、ORM 框架）
 - [ ] 并发的使用（errgroup 的并行链路请求）
-- [x] 微服务中间件的使用（ELK、Opentracing、Prometheus、Kafka）
+- [x] 微服务中间件的使用（ELK、Opentracing、Prometheus、Kafka） ([链路追踪](./docs/链路追踪.md))
 - [ ] 缓存的使用优化（一致性处理、Pipeline 优化）
 
 ## 项目目录结构
