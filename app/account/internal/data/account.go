@@ -18,9 +18,15 @@ func (a *accountRepo) GetAccount(ctx context.Context, id int) (*biz.Account, err
 	if err != nil {
 		return nil, err
 	}
+
+	var name string
+	if po.Name == "admin" {
+		name = "Admin"
+	}
+
 	return &biz.Account{
 		Id:    po.ID,
-		Name:  po.Name,
+		Name:  name,
 		Email: po.Email,
 		Age:   po.Age,
 		Sex:   po.Sex,
