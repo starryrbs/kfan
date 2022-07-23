@@ -30,25 +30,25 @@ func (a *AccountInterface) DeleteAccount(ctx context.Context, req *pb.DeleteAcco
 	return &pb.DeleteAccountReply{}, nil
 }
 func (a *AccountInterface) GetAccount(ctx context.Context, req *pb.GetAccountRequest) (*pb.GetAccountReply, error) {
-	rv, err := a.ac.Repo.GetAccount(ctx, int(req.Id))
+	result, err := a.ac.Repo.GetAccount(ctx, int(req.Id))
 	if err != nil {
 		return nil, err
 	}
 	return &pb.GetAccountReply{
-		Id:    int32(rv.Id),
-		Name:  rv.Name,
-		Email: rv.Email,
-		Sex:   rv.Sex,
-		Age:   int64(rv.Age),
+		Id:    int32(result.Id),
+		Name:  result.Name,
+		Email: result.Email,
+		Sex:   result.Sex,
+		Age:   int64(result.Age),
 	}, nil
 }
 func (a *AccountInterface) ListAccount(ctx context.Context, req *pb.ListAccountRequest) (*pb.ListAccountReply, error) {
-	rv, err := a.ac.Repo.ListAccount(ctx)
+	result, err := a.ac.Repo.ListAccount(ctx)
 	if err != nil {
 		return nil, err
 	}
 	rs := make([]*pb.ListAccountReply_Account, 0)
-	for _, x := range rv {
+	for _, x := range result {
 		rs = append(rs, &pb.ListAccountReply_Account{
 			Name:  x.Name,
 			Age:   int64(x.Age),
@@ -62,9 +62,9 @@ func (a *AccountInterface) ListAccount(ctx context.Context, req *pb.ListAccountR
 	}, nil
 }
 func (a *AccountInterface) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginReply, error) {
-	rv, err := a.ac.Repo.Login(ctx, req.Username)
+	result, err := a.ac.Repo.Login(ctx, req.Username)
 	if err != nil {
 		return nil, err
 	}
-	return &pb.LoginReply{Id: int32(rv.Id)}, nil
+	return &pb.LoginReply{Id: int32(result.Id)}, nil
 }
